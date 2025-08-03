@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cotizador DX Nómina</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      padding: 30px 0;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .mode-selector {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      gap: 10px;
+    }
+    .mode-btn {
+      padding: 12px 25px;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .mode-btn.active {
+      background: linear-gradient(to right, #ffd700, #ff8c00);
+      color: #1a2a6c;
+      border-color: #ffd700;
+    }
+    .mode-btn:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .calculator-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    .input-section {
+      flex: 1;
+      min-width: 300px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .results-section {
+      flex: 2;
+      min-width: 300px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      text-align: center;
+      color: #ffd700;
+    }
+    .input-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    input, select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      font-size: 1.1rem;
+    }
+    input:focus, select:focus {
+      outline: 2px solid #ffd700;
+      background: rgba(255, 255, 255, 0.25);
+    }
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(to right, #ffd700, #ff8c00);
+      color: #1a2a6c;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    .resumen-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+      gap: 15px;
+    }
+    .resumen-card {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+    .resumen-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 18px rgba(255, 215, 0, 0.6);
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .resumen-card strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #ffd700;
+    }
+    .resumen-card span {
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    th {
+      background: rgba(26, 42, 108, 0.8);
+      padding: 15px;
+      text-align: center;
+    }
+    td {
+      padding: 12px 15px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    tr:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: auto;
+      width: 100%;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>COTIZADOR DX NÓMINA</h1>
+      <p class="subtitle">Calcula tu pago mensual, saldo insoluto, pago a capital e intereses</p>
+    </header>
+    <div class="mode-selector">
+      <button class="mode-btn active" onclick="setMode('monto')">Calcular por Monto</button>
+      <button class="mode-btn" onclick="setMode('pagoMensual')">Calcular por Pago Mensual</button>
+    </div>
+    <div class="calculator-container">
+      <div class="input-section">
+        <h2 class="section-title">Datos del Préstamo</h2>
+        <div id="monto-mode">
+          <div class="input-group">
+            <label for="amount">Monto del préstamo ($)</label>
+            <input type="text" id="amount" placeholder="Ej: 50,000.00">
+          </div>
+          <div class="input-group">
+            <label for="plazo">Plazo (meses)</label>
+            <input type="number" id="plazo" placeholder="Ej: 24" min="1">
+          </div>
+          <div class="input-group">
+            <label for="tasa">Tasa Anual</label>
+            <select id="tasa">
+              <option value="28.66">28.66%</option>
+              <option value="33.02">33.02%</option>
+            </select>
+          </div>
+        </div>
+        <div id="pagoMensual-mode" style="display: none;">
+          <div class="input-group">
+            <label for="pagoMensual">Pago Mensual ($)</label>
+            <input type="text" id="pagoMensual" placeholder="Ej: 2,500.00">
+          </div>
+          <div class="input-group">
+            <label for="tasaPago">Tasa Anual</label>
+            <select id="tasaPago">
+              <option value="28.66">28.66%</option>
+              <option value="33.02">33.02%</option>
+            </select>
+          </div>
+        </div>
+        <button onclick="calcular()">Calcular</button>
+      </div>
+
+      <div class="results-section">
+        <h2 class="section-title">Resultados del Cálculo</h2>
+        <div id="resumen-resultados" class="resumen-container" style="display:none;">
+          <div class="resumen-card">
+            <strong>Pago Mensual</strong>
+            <span id="res-pago-mensual">$0.00</span>
+          </div>
+          <div class="resumen-card">
+            <strong>Pago Total</strong>
+            <span id="res-pago-total">$0.00</span>
+          </div>
+          <div class="resumen-card">
+            <strong>Intereses Totales</strong>
+            <span id="res-intereses">$0.00</span>
+          </div>
+        </div>
+        <div id="tabla-amortizacion" class="table-container" style="display: block;">
+          <table id="amortizacionTable">
+            <thead>
+              <tr>
+                <th>Mes</th>
+                <th>Pago Mensual</th>
+                <th>Saldo Insoluto</th>
+                <th>Pago a Capital</th>
+                <th>Pago Intereses</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div id="tabla-montos" class="table-container" style="display: none;">
+          <p id="pagoIngresado" style="text-align: center; margin-bottom: 15px;"></p>
+          <table id="montosTable">
+            <thead>
+              <tr>
+                <th>Plazo (meses)</th>
+                <th>Monto del Préstamo</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <footer>
+      &copy; 2025 Cotizador DX Nómina. Todos los derechos reservados.
+    </footer>
+  </div>
+
+  <script>
+    function setMode(mode) {
+      document.getElementById('monto-mode').style.display = mode === 'monto' ? 'block' : 'none';
+      document.getElementById('pagoMensual-mode').style.display = mode === 'pagoMensual' ? 'block' : 'none';
+      document.getElementById('tabla-amortizacion').style.display = mode === 'monto' ? 'block' : 'none';
+      document.getElementById('tabla-montos').style.display = mode === 'pagoMensual' ? 'block' : 'none';
+      document.getElementById('resumen-resultados').style.display = mode === 'monto' ? 'flex' : 'none';
+      const botones = document.querySelectorAll('.mode-btn');
+      botones[0].classList.toggle('active', mode === 'monto');
+      botones[1].classList.toggle('active', mode === 'pagoMensual');
+    }
+
+    function formatoPesos(valor) {
+      return valor.toLocaleString("es-MX", {
+        style: "currency",
+        currency: "MXN",
+        minimumFractionDigits: 2
+      });
+    }
+    function parsePesos(valor) {
+      return parseFloat(valor.replace(/[^0-9.-]+/g, ""));
+    }
+    function initInputFormato() {
+      document.querySelectorAll("#amount, #pagoMensual").forEach(input => {
+        input.addEventListener("blur", () => {
+          let numero = parsePesos(input.value);
+          if (!isNaN(numero)) input.value = formatoPesos(numero);
+        });
+        input.addEventListener("focus", () => {
+          let numero = parsePesos(input.value);
+          input.value = isNaN(numero) ? "" : numero;
+        });
+      });
+    }
+
+    function calcular() {
+      const tasaAnualMonto = parseFloat(document.getElementById('tasa').value);
+      const tasaAnualPago = parseFloat(document.getElementById('tasaPago').value);
+
+      if (document.querySelector('.mode-btn.active').textContent === 'Calcular por Monto') {
+        const monto = parsePesos(document.getElementById('amount').value);
+        const plazo = parseInt(document.getElementById('plazo').value);
+
+        if (isNaN(monto) || isNaN(plazo) || monto <= 0 || plazo <= 0) {
+          alert("Por favor, ingresa valores válidos.");
+          return;
+        }
+
+        const tasaMensualAnual = tasaAnualMonto === 28.66 ? 33.2456 / 12 : 38.3032 / 12;
+        const tasaMensual = tasaMensualAnual / 100;
+
+        const x = Math.pow(1 + tasaMensual, plazo);
+        const pagoMensual = (monto * x * tasaMensual) / (x - 1);
+        const pagoTotal = pagoMensual * plazo;
+        const interesesTotales = pagoTotal - monto;
+
+        document.getElementById("resumen-resultados").style.display = "flex";
+        document.getElementById("res-pago-mensual").textContent = formatoPesos(pagoMensual);
+        document.getElementById("res-pago-total").textContent = formatoPesos(pagoTotal);
+        document.getElementById("res-intereses").textContent = formatoPesos(interesesTotales);
+
+        const tbody = document.querySelector('#amortizacionTable tbody');
+        tbody.innerHTML = '';
+        let balance = monto;
+        for (let mes = 1; mes <= plazo; mes++) {
+          const intereses = balance * tasaMensual;
+          const capital = pagoMensual - intereses;
+          balance -= capital;
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${mes}</td>
+            <td>${formatoPesos(pagoMensual)}</td>
+            <td>${formatoPesos(Math.max(balance, 0))}</td>
+            <td>${formatoPesos(capital)}</td>
+            <td>${formatoPesos(intereses)}</td>
+          `;
+          tbody.appendChild(row);
+        }
+      } else {
+        const pagoMensual = parsePesos(document.getElementById('pagoMensual').value);
+        const tasaAnual = tasaAnualPago;
+        if (isNaN(pagoMensual) || pagoMensual <= 0) {
+          alert("Por favor, ingresa un pago mensual válido.");
+          return;
+        }
+        let plazos, tasaMensual;
+        if (tasaAnual === 28.66) {
+          plazos = [30, 42, 54];
+          tasaMensual = 33.2456 / 12;
+        } else {
+          plazos = [18, 24, 36, 48, 60];
+          tasaMensual = 38.3032 / 12;
+        }
+        const tasaDecimal = tasaMensual / 100;
+        document.getElementById('pagoIngresado').innerHTML =
+          `<strong>Pago Mensual Ingresado:</strong> ${formatoPesos(pagoMensual)}`;
+        const tbody = document.querySelector('#montosTable tbody');
+        tbody.innerHTML = '';
+        plazos.forEach(plazo => {
+          const monto = (pagoMensual * (Math.pow(1 + tasaDecimal, plazo) - 1)) /
+                        (tasaDecimal * Math.pow(1 + tasaDecimal, plazo));
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${plazo}</td><td>${formatoPesos(monto)}</td>`;
+          tbody.appendChild(row);
+        });
+      }
+    }
+    initInputFormato();
+  </script>
+</body>
+</html>

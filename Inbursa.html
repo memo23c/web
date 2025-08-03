@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Pagos de Préstamo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>COTIZADOR NÓMINA IMSS</h1>
+            <p class="subtitle">Calcula tu pago mensual, saldo insoluto, pago a capital y pago de intereses</p>
+        </header>
+        
+        <div class="mode-selector">
+            <button id="modo-monto" class="mode-btn active">Calcular por Monto</button>
+            <button id="modo-pago" class="mode-btn">Calcular por Pago Mensual</button>
+        </div>
+        
+        <div class="calculator-container">
+            <div class="input-section">
+                <h2 class="section-title">Datos del Préstamo</h2>
+                
+                <!-- Sección para calcular por monto -->
+                <div id="seccion-monto" class="input-mode">
+                    <div class="input-group">
+                        <label for="monto">Monto del Préstamo ($)</label>
+                        <input type="number" id="monto" placeholder="Ej. 50000" min="1000" step="100">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="plazo">Plazo (meses)</label>
+                        <input type="number" id="plazo" placeholder="Ej. 24" min="1" max="120">
+                    </div>
+                </div>
+                
+                <!-- Sección para calcular por pago mensual -->
+                <div id="seccion-pago" class="input-mode" style="display: none;">
+                    <div class="input-group">
+                        <label for="pago-mensual-input">Pago Mensual ($)</label>
+                        <input type="number" id="pago-mensual-input" placeholder="Ej. 2500" min="100" step="10">
+                    </div>
+                    <p class="note">Se calculará el monto para plazos de 12, 24, 36, 48 y 60 meses</p>
+                </div>
+                
+                <button id="calcular">Calcular</button>
+                
+                <div class="gatito-container">
+                    <div class="emoji-gatito">🐱💰</div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title">Resultados del Cálculo</h2>
+                
+                <!-- Resultados para calcular por monto -->
+                <div id="resultados-monto">
+                    <div class="result-card">
+                        <div class="result-title">Pago Mensual</div>
+                        <div class="result-value" id="pago-mensual">$0.00</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">Pago Total</div>
+                        <div class="result-value" id="pago-total">$0.00</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">Intereses Totales</div>
+                        <div class="result-value" id="intereses-total">$0.00</div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="tabla-amortizacion">
+                            <thead>
+                                <tr>
+                                    <th>Mes</th>
+                                    <th>Pago Mensual</th>
+                                    <th>Saldo Insoluto</th>
+                                    <th>Pago a Capital</th>
+                                    <th>Pago Intereses</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Los datos se llenarán con JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Resultados para calcular por pago mensual -->
+                <div id="resultados-pago" style="display: none;">
+                    <div class="result-card">
+                        <div class="result-title">Pago Mensual Ingresado</div>
+                        <div class="result-value" id="pago-ingresado">$0.00</div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="tabla-resultados-pago">
+                            <thead>
+                                <tr>
+                                    <th>Plazo (meses)</th>
+                                    <th>Monto del Préstamo</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Los datos se llenarán con JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Calculadora de Préstamos &copy; 2023 | Tasa Mensual C/IVA: 2.269226%</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
