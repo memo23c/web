@@ -1,0 +1,328 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+    color: #fff;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    padding: 30px 0;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.mode-selector {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 10px;
+}
+
+.mode-btn {
+    padding: 12px 25px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mode-btn.active {
+    background: linear-gradient(to right, #ffd700, #ff8c00);
+    color: #1a2a6c;
+    border-color: #ffd700;
+}
+
+.mode-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.calculator-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.input-section {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.results-section {
+    flex: 2;
+    min-width: 300px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.section-title {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #ffd700;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 1.1rem;
+}
+
+input:focus {
+    outline: 2px solid #ffd700;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.note {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(to right, #ffd700, #ff8c00);
+    color: #1a2a6c;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.result-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.result-title {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #ffd700;
+}
+
+.result-value {
+    font-size: 2.2rem;
+    font-weight: bold;
+}
+
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+th {
+    background: rgba(26, 42, 108, 0.8);
+    padding: 15px;
+    text-align: center;
+}
+
+td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+tr:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.gatito-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.gatito-img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+    width: 100%;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .calculator-container {
+        flex-direction: column;
+    }
+    
+    h1 {
+        font-size: 2.2rem;
+    }
+    
+    .mode-selector {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .mode-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+.emoji-gatito {
+    font-size: 4rem;
+    text-align: center;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+/* === Responsive para móviles y tablets (sin cambios visuales en diseño) === */
+@media (max-width: 1024px) {
+  /* Ajustar tamaño de fuente en pantallas pequeñas */
+  h1 {
+    font-size: 2.3rem;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    padding: 0 15px;
+  }
+
+  /* Asegurar que el contenedor use todo el ancho disponible */
+  .container, .calculator-container {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  /* Apilar columnas en móvil */
+  .calculator-container {
+    flex-direction: column;
+  }
+
+  .input-section, .results-section {
+    min-width: 100%;
+  }
+
+  /* Tabla con scroll horizontal si es necesario */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mejorar legibilidad en inputs y botones */
+  input, button {
+    font-size: 1rem;
+    padding: 14px;
+  }
+
+  /* Ajustar el selector de modo */
+  .mode-selector {
+    flex-wrap: wrap;
+  }
+
+  .mode-btn {
+    font-size: 0.95rem;
+    padding: 10px 18px;
+  }
+
+  /* Ajustar el gatito */
+  .gatito-img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .emoji-gatito {
+    font-size: 3.5rem;
+  }
+
+  footer {
+    font-size: 0.9rem;
+    padding: 15px;
+  }
+}

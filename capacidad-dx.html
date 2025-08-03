@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calcular Capacidad DX</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 0;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .input-section {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      max-width: 600px;
+      margin: 30px auto;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    input:focus, select:focus {
+      outline: 2px solid #ffd700;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .radio-group {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .radio-group label {
+      margin: 0 15px;
+      font-size: 1.1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(to right, #ffd700, #ff8c00);
+      color: #1a2a6c;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .result {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #ffd700;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      max-width: 500px;
+      margin: 30px auto;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: auto;
+      width: 100%;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>CALCULAR CAPACIDAD DX</h1>
+      <p class="subtitle">Ingresa tus datos para calcular tu capacidad de pago</p>
+    </header>
+
+    <div class="input-section">
+      <div class="input-group">
+        <label for="ingreso">INGRESO MENSUAL</label>
+        <input type="text" id="ingreso" placeholder="Ej: 15,000.00">
+      </div>
+
+      <div class="input-group">
+        <label for="descuentosExternos">TOTAL DESCUENTOS EXTERNOS</label>
+        <input type="text" id="descuentosExternos" placeholder="Ej: 2,000.00">
+      </div>
+
+      <div class="input-group">
+        <label for="descuentosDimex">TOTAL DESCUENTOS DIMEX</label>
+        <input type="text" id="descuentosDimex" placeholder="Ej: 1,500.00">
+      </div>
+
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="porcentaje" value="0.6" checked> 60%
+        </label>
+        <label>
+          <input type="radio" name="porcentaje" value="0.8"> 80%
+        </label>
+      </div>
+
+      <button onclick="calcularCapacidad()">Calcular</button>
+
+      <div id="resultado" class="result" style="display: none;"></div>
+    </div>
+
+    <footer>
+      &copy; 2025 Calcular Capacidad DX. Todos los derechos reservados a hackemi.
+    </footer>
+  </div>
+
+  <script>
+    // Formatea número a 2 decimales con separador de miles: 2155.2 → "2,155.20"
+    function formatoDosDecimales(valor) {
+      const num = parseFloat(valor);
+      if (isNaN(num)) return "";
+      return num.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    // Convierte texto con comas a número: "2,155.20" → 2155.20
+    function parseNumero(valor) {
+      if (!valor) return NaN;
+      const sinComas = valor.replace(/,/g, '');
+      return parseFloat(sinComas);
+    }
+
+    // Formatear campos al salir del foco
+    document.addEventListener("DOMContentLoaded", () => {
+      const inputs = document.querySelectorAll("#ingreso, #descuentosExternos, #descuentosDimex");
+
+      inputs.forEach(input => {
+        // Al enfocar: mostrar valor sin formato para edición
+        input.addEventListener("focus", () => {
+          const value = input.value;
+          if (value !== "") {
+            const num = parseNumero(value);
+            if (!isNaN(num)) {
+              input.value = num;
+            }
+          }
+        });
+
+        // Validar solo números, punto y coma
+        input.addEventListener("input", () => {
+          const value = input.value;
+          const regex = /^[\d,]*\.?\d{0,2}$/;
+          if (!regex.test(value)) {
+            input.value = value.slice(0, -1);
+          }
+        });
+
+        // Al salir: formatear como 2,155.20
+        input.addEventListener("blur", () => {
+          if (input.value !== "") {
+            const num = parseNumero(input.value);
+            if (!isNaN(num) && num >= 0) {
+              input.value = formatoDosDecimales(num);
+            } else {
+              input.value = "0.00";
+            }
+          }
+        });
+      });
+    });
+
+    // Función de cálculo (tu lógica exacta, sin cambios)
+    function calcularCapacidad() {
+      const ingreso = parseNumero(document.getElementById('ingreso').value);
+      const descExternos = parseNumero(document.getElementById('descuentosExternos').value);
+      const descDimex = parseNumero(document.getElementById('descuentosDimex').value);
+      const porcentaje = parseFloat(document.querySelector('input[name="porcentaje"]:checked').value);
+
+      const resultadoDiv = document.getElementById('resultado');
+      resultadoDiv.style.display = 'block';
+
+      // Validación básica
+      if (isNaN(ingreso) || isNaN(descExternos) || isNaN(descDimex)) {
+        resultadoDiv.textContent = "Por favor, completa todos los campos.";
+        resultadoDiv.style.color = "#ff6b6b";
+        return;
+      }
+
+      // --- TU LÓGICA ORIGINAL, SIN CAMBIOS ---
+      const R1 = (ingreso - descExternos) * porcentaje;
+      const R2 = ingreso - descExternos - descDimex;
+      const R3 = R1 - descDimex;
+      const R4 = R2 - 500;
+      const R5 = R2 - R3;
+
+      let resultado;
+
+      if (R3 <= 0) {
+        resultado = "SIN CAPACIDAD";
+        resultadoDiv.style.color = "#e74c3c";
+      } else if (R5 > 499.9999) {
+        resultado = `$${formatoDosDecimales(R3)}`;
+        resultadoDiv.style.color = "#ffd700";
+      } else {
+        resultado = `$${formatoDosDecimales(R4)}`;
+        resultadoDiv.style.color = "#ffd700";
+      }
+
+      resultadoDiv.textContent = `Capacidad de Pago: ${resultado}`;
+    }
+  </script>
+</body>
+</html>
